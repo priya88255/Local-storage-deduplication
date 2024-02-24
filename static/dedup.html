@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Local File Upload(Data Deduplication)</title>
+    <style>
+        /* h1{
+            font-size: 50px;
+        } */
+        body {
+            /* background-image: url('techno.jpeg'); */
+            background-color: grey;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            text-align: center;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <h1>Local File Upload-Data Deduplication</h1>
+    
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">Upload</button>
+    <div id="status"></div>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file to upload.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('status').innerText = data.message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('status').innerText = 'Error uploading the file. Please try again.';
+            })
+            .finally(() => {
+                fileInput.value = ''; // Clear the file input
+            });
+        }
+    </script>
+</body>
+</html>
